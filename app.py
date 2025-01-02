@@ -6,7 +6,7 @@ import requests
 from PIL import Image
 
 # Set the FAL_KEY environment variable (if not already set)
-os.environ["FAL_KEY"] = "0e002174-96c8-4334-ab67-3c3bc6efede8:490b3a32ac965e52ea42f8f623bcdcdf"  # Insert your FAL API key here, or set it in your environment
+os.environ["FAL_KEY"] = "ecb6e7bc-425e-4a2c-92eb-9b0efeabe7fd:a882593bbf7140a71a0411f9ae0a93a0"  # Insert your FAL API key here, or set it in your environment
 
 # Fetch the API key from the environment
 FAL_KEY = os.getenv("FAL_KEY")
