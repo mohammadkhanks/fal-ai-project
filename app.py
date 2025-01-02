@@ -61,6 +61,9 @@ def index():
         response = requests.get(image_url)
         if response.status_code == 200:
             file_path = os.path.join(STATIC_IMAGE_FOLDER, f"generated_image_{width}x{height}.jpg")
+            if not os.path.exists(STATIC_IMAGE_FOLDER):
+                os.makedirs(STATIC_IMAGE_FOLDER)
+
             print(f"Saving image to {file_path}")
             with open(file_path, "wb") as f:
                 f.write(response.content)
