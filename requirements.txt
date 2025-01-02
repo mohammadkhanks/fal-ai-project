@@ -2,3 +2,4 @@ Flask
 fal-client
 requests
 Pillow
+PIL
