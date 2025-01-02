@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>Generate and Download Image</h1>
+    
     <form action="/generate-image" method="POST">
         <label for="prompt">Enter Prompt:</label><br>
         <input type="text" id="prompt" name="prompt" value="A beautiful landscape"><br><br>
@@ -19,6 +20,16 @@
 
         <button type="submit">Generate Image</button>
     </form>
+
+    {% if image_path %}
+        <h2>Generated Image:</h2>
+        <img src="{{ url_for('static', filename=image_path) }}" alt="Generated Image" style="max-width: 100%; max-height: 500px;">
+        
+        <br><br>
+        <a href="{{ url_for('static', filename=image_path) }}" download>
+            <button>Download Image</button>
+        </a>
+    {% endif %}
 
     {% if error %}
         <p style="color:red;">Error: {{ error }}</p>

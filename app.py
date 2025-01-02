@@ -1,7 +1,7 @@
 import os
 import fal_client
 import io
-from flask import Flask, render_template, send_file, request
+from flask import Flask, render_template, request, send_file, redirect, url_for
 import requests
 from PIL import Image
 
@@ -19,11 +19,17 @@ fal_client.api_key = FAL_KEY
 # Initialize Flask app
 app = Flask(__name__)
 
+# Folder for saving generated images
+STATIC_IMAGE_FOLDER = os.path.join(app.static_folder, 'generated_images')
+
+# Ensure the folder exists
+os.makedirs(STATIC_IMAGE_FOLDER, exist_ok=True)
+
 @app.route('/')
 def index():
     return render_template('index.html')  # Render the page with the button to generate the image
 
-@app.route('/generate-image', methods=["GET", "POST"])
+@app.route('/generate-image', methods=["POST"])
 def generate_image():
     if request.method == "POST":
         # Get prompt and image size from the form (if you want dynamic user inputs)
@@ -48,12 +54,14 @@ def generate_image():
             # Download the image using requests
             response = requests.get(image_url)
             if response.status_code == 200:
-                # Save the image in memory
-                img_io = io.BytesIO(response.content)
-                img_io.seek(0)
-                
-                # Return the image as a downloadable file
-                return send_file(img_io, mimetype='image/jpeg', as_attachment=True, download_name='generated_image.jpg')
+                # Save the image in the static folder
+                file_path = os.path.join(STATIC_IMAGE_FOLDER, f"generated_image_{width}x{height}.jpg")
+                with open(file_path, "wb") as f:
+                    f.write(response.content)
+
+                # Provide the image download link
+                return render_template("index.html", image_path=f"generated_images/generated_image_{width}x{height}.jpg")
+
             else:
                 return render_template("index.html", error="Failed to download the image.")
         except Exception as e:
