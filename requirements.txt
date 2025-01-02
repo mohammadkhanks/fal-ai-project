@@ -1,5 +1,4 @@
 Flask
 fal-client
 requests
-Pillow
-PIL
+Pillow>=11.1.0
