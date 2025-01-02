@@ -61,6 +61,7 @@ def index():
         response = requests.get(image_url)
         if response.status_code == 200:
             file_path = os.path.join(STATIC_IMAGE_FOLDER, f"generated_image_{width}x{height}.jpg")
+            print(f"Saving image to {file_path}")
             with open(file_path, "wb") as f:
                 f.write(response.content)
             return render_template("index.html", image_url=f"images/generated_image_{width}x{height}.jpg")
