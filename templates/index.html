@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px 0;
+        }
+        label {
+            font-size: 18px;
+        }
+        .error {
+            color: red;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .generated-image {
+            max-width: 100%;
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Image Generator</h1>
+<form method="POST">
+    <label for="prompt">Enter prompt:</label><br>
+    <input type="text" id="prompt" name="prompt" required><br>
+
+    <label for="width">Enter width:</label><br>
+    <input type="number" id="width" name="width" required><br>
+
+    <label for="height">Enter height:</label><br>
+    <input type="number" id="height" name="height" required><br>
+
+    <button type="submit">Generate Image</button>
+</form>
+
+{% if error %}
+    <p class="error">{{ error }}</p>
+{% endif %}
+
+{% if image_url %}
+    <div class="result">
+        <h2>Generated Image:</h2>
+        <img src="{{ image_url }}" alt="Generated Image" class="generated-image">
+    </div>
+{% endif %}
+
+</body>
+</html>
