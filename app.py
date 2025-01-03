@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, redirect, url_for, session, make_response
+from flask import Flask, render_template, request, redirect, url_for, session
 import os
 import fal_client
 import requests
@@ -20,7 +20,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "supersecretkey")  # Set a secure key for session management
 
 # Password for accessing the app
-APP_PASSWORD = "Thanos"  # Replace with your desired password
+APP_PASSWORD = "yourpassword"  # Replace with your desired password
 
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -70,14 +70,20 @@ def generate_image():
             img_data = BytesIO(response.content)
             img_data.seek(0)
 
-            # Provide download link with additional info
+            # Create a unique filename based on prompt, width, height, and seed
             filename = f"generated_image_{width}x{height}_seed_{seed or 'random'}.jpg"
-            return send_file(
-                img_data,
-                as_attachment=True,
-                download_name=filename,
-                mimetype="image/jpeg",
-            )
+
+            # Serve the image URL for UI display
+            image_data = {
+                "image_url": image_url,  # URL to display the image
+                "filename": filename,    # Filename for download
+                "prompt": prompt,        # Show the prompt used
+                "width": width,          # Show image width
+                "height": height,        # Show image height
+                "seed": seed or "random" # Show seed or "random"
+            }
+            return render_template("index.html", **image_data)
+
         else:
             return render_template("index.html", error="Failed to fetch the image.")
     except Exception as e:
@@ -85,6 +91,7 @@ def generate_image():
 
 @app.route("/logout")
 def logout():
+    # Remove the logged-in session and redirect to the login page
     session.pop("logged_in", None)
     return redirect(url_for("login"))
 
