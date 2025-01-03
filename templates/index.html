@@ -10,13 +10,13 @@
     
     <form action="/generate-image" method="POST">
         <label for="prompt">Enter Prompt:</label><br>
-        <input type="text" id="prompt" name="prompt" value="{{ request.form.get('prompt', 'A beautiful landscape') }}"><br><br>
+        <input type="text" id="prompt" name="prompt" value="{{ prompt or 'A beautiful landscape' }}"><br><br>
         
         <label for="width">Width:</label><br>
-        <input type="number" id="width" name="width" value="{{ request.form.get('width', '1920') }}"><br><br>
+        <input type="number" id="width" name="width" value="{{ width or 1920 }}"><br><br>
         
         <label for="height">Height:</label><br>
-        <input type="number" id="height" name="height" value="{{ request.form.get('height', '1080') }}"><br><br>
+        <input type="number" id="height" name="height" value="{{ height or 1080 }}"><br><br>
 
         <button type="submit">Generate and Download Image</button>
     </form>

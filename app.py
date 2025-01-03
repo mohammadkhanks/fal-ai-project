@@ -66,6 +66,7 @@ def generate_image():
                     download_name=f"generated_image_{width}x{height}.jpg"
                 )
             else:
+                # Pass back details for display in case of failure
                 return render_template(
                     "index.html",
                     error="Failed to download the image.",
@@ -74,6 +75,7 @@ def generate_image():
                     height=height
                 )
         except Exception as e:
+            # Pass back details for display in case of an error
             return render_template(
                 "index.html",
                 error=f"Error generating image: {str(e)}",
