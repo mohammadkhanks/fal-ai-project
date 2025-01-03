@@ -20,7 +20,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "supersecretkey")  # Set a secure key for session management
 
 # Password for accessing the app
-APP_PASSWORD = "yourpassword"  # Replace with your desired password
+APP_PASSWORD = "Thanos"  # Replace with your desired password
 
 @app.route("/", methods=["GET", "POST"])
 def login():
