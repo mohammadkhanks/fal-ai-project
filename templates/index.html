@@ -38,9 +38,10 @@
         <p><strong>Seed:</strong> {{ seed }}</p>
 
         <br><br>
-        <a href="{{ image_url }}" download="{{ filename }}">
+        <a href="{{ image_url }}" download="generated_image_{{ width }}x{{ height }}_{{ seed }}.jpg">
             <button>Download Image</button>
         </a>
+        
     {% endif %}
 
     {% if error %}
