@@ -29,24 +29,83 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')  # Render the page with the button to generate the image
 
+# @app.route('/generate-image', methods=["POST"])
+# def generate_image():
+#     if request.method == "POST":
+#         # Get prompt and image size from the form
+#         prompt = request.form.get("prompt", "A beautiful landscape")  # Default prompt if not provided
+#         width = int(request.form.get("width", 1920))  # Default width
+#         height = int(request.form.get("height", 1080))  # Default height
+        
+#         # Call the FAL AI API to generate the image based on the prompt and size
+#         try:
+#             result = fal_client.subscribe(
+#                 "fal-ai/flux-pro/v1.1", 
+#                 arguments={
+#                     "prompt": prompt,
+#                     "width": width,
+#                     "height": height,
+#                 }
+#             )
+
+#             # Extract image URL from the API response
+#             image_url = result['images'][0]['url']
+            
+#             # Download the image using requests
+#             response = requests.get(image_url)
+#             if response.status_code == 200:
+#                 # Open the image in memory
+#                 image_bytes = io.BytesIO(response.content)
+#                 image_bytes.seek(0)  # Reset stream pointer
+
+#                 # Serve the image as a downloadable file
+#                 return send_file(
+#                     image_bytes,
+#                     mimetype='image/jpeg',
+#                     as_attachment=True,
+#                     download_name=f"generated_image_{width}x{height}.jpg"
+#                 )
+#             else:
+#                 # Pass back details for display in case of failure
+#                 return render_template(
+#                     "index.html",
+#                     error="Failed to download the image.",
+#                     prompt=prompt,
+#                     width=width,
+#                     height=height
+#                 )
+#         except Exception as e:
+#             # Pass back details for display in case of an error
+#             return render_template(
+#                 "index.html",
+#                 error=f"Error generating image: {str(e)}",
+#                 prompt=prompt,
+#                 width=width,
+#                 height=height
+#             )
+
+#     return render_template('index.html')
 @app.route('/generate-image', methods=["POST"])
 def generate_image():
     if request.method == "POST":
-        # Get prompt and image size from the form
-        prompt = request.form.get("prompt", "A beautiful landscape")  # Default prompt if not provided
+        # Get prompt, dimensions, and seed from the form
+        prompt = request.form.get("prompt", "A beautiful landscape")  # Default prompt
         width = int(request.form.get("width", 1920))  # Default width
         height = int(request.form.get("height", 1080))  # Default height
-        
-        # Call the FAL AI API to generate the image based on the prompt and size
+        seed = request.form.get("seed", None)  # Optional seed, defaults to None
+        seed = int(seed) if seed else None  # Convert to integer if provided
+
+        # Call the FAL AI API to generate the image
         try:
-            result = fal_client.subscribe(
-                "fal-ai/flux-pro/v1.1", 
-                arguments={
-                    "prompt": prompt,
-                    "width": width,
-                    "height": height,
-                }
-            )
+            arguments = {
+                "prompt": prompt,
+                "width": width,
+                "height": height,
+            }
+            if seed is not None:
+                arguments["seed"] = seed  # Add seed to API arguments
+
+            result = fal_client.subscribe("fal-ai/flux-pro/v1.1", arguments=arguments)
 
             # Extract image URL from the API response
             image_url = result['images'][0]['url']
@@ -63,7 +122,7 @@ def generate_image():
                     image_bytes,
                     mimetype='image/jpeg',
                     as_attachment=True,
-                    download_name=f"generated_image_{width}x{height}.jpg"
+                    download_name=f"generated_image_{width}x{height}_seed{seed or 'default'}.jpg"
                 )
             else:
                 # Pass back details for display in case of failure
@@ -72,7 +131,8 @@ def generate_image():
                     error="Failed to download the image.",
                     prompt=prompt,
                     width=width,
-                    height=height
+                    height=height,
+                    seed=seed
                 )
         except Exception as e:
             # Pass back details for display in case of an error
@@ -81,7 +141,8 @@ def generate_image():
                 error=f"Error generating image: {str(e)}",
                 prompt=prompt,
                 width=width,
-                height=height
+                height=height,
+                seed=seed
             )
 
     return render_template('index.html')

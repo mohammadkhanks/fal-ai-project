@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,6 +26,49 @@
         <p><strong>Prompt:</strong> {{ prompt }}</p>
         <p><strong>Width:</strong> {{ width }} px</p>
         <p><strong>Height:</strong> {{ height }} px</p>
+    {% endif %}
+
+    {% if error %}
+        <p style="color:red;">Error: {{ error }}</p>
+    {% endif %}
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Image</title>
+</head>
+<body>
+    <h1>Generate and Download Image</h1>
+    
+    <form action="/generate-image" method="POST">
+        <label for="prompt">Enter Prompt:</label><br>
+        <input type="text" id="prompt" name="prompt" value="{{ prompt or 'A beautiful landscape' }}"><br><br>
+        
+        <label for="width">Width:</label><br>
+        <input type="number" id="width" name="width" value="{{ width or 1920 }}"><br><br>
+        
+        <label for="height">Height:</label><br>
+        <input type="number" id="height" name="height" value="{{ height or 1080 }}"><br><br>
+
+        <label for="seed">Seed (Optional):</label><br>
+        <input type="number" id="seed" name="seed" value="{{ seed or '' }}"><br><br>
+
+        <button type="submit">Generate and Download Image</button>
+    </form>
+
+    {% if prompt and width and height %}
+        <h2>Image Generation Details:</h2>
+        <p><strong>Prompt:</strong> {{ prompt }}</p>
+        <p><strong>Width:</strong> {{ width }} px</p>
+        <p><strong>Height:</strong> {{ height }} px</p>
+        {% if seed %}
+            <p><strong>Seed:</strong> {{ seed }}</p>
+        {% else %}
+            <p><strong>Seed:</strong> Default (Random)</p>
+        {% endif %}
     {% endif %}
 
     {% if error %}
