@@ -20,7 +20,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "supersecretkey")  # Set a secure key for session management
 
 # Password for accessing the app
-APP_PASSWORD = "yourpassword"  # Replace with your desired password
+APP_PASSWORD = "Postman"  # Replace with your desired password
 
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -89,7 +89,7 @@ def generate_image():
     except Exception as e:
         return render_template("index.html", error=f"Error generating image: {str(e)}")
 
-@app.route("/logout")
+@app.route("/logout", methods=['POST'])
 def logout():
     # Remove the logged-in session and redirect to the login page
     session.pop("logged_in", None)
