@@ -19,11 +19,11 @@ fal_client.api_key = FAL_KEY
 # Initialize Flask app
 app = Flask(__name__)
 
-# # Folder for saving generated images
-# STATIC_IMAGE_FOLDER = os.path.join(app.static_folder, 'generated_images')
+# Folder for saving generated images
+STATIC_IMAGE_FOLDER = os.path.join(app.static_folder, 'generated_images')
 
-# # Ensure the folder exists
-# os.makedirs(STATIC_IMAGE_FOLDER, exist_ok=True)
+# Ensure the folder exists
+os.makedirs(STATIC_IMAGE_FOLDER, exist_ok=True)
 
 @app.route('/')
 def index():
@@ -32,7 +32,7 @@ def index():
 @app.route('/generate-image', methods=["POST"])
 def generate_image():
     if request.method == "POST":
-        # Get prompt and image size from the form
+        # Get prompt and image size from the form (if you want dynamic user inputs)
         prompt = request.form.get("prompt", "A beautiful landscape")  # Default prompt if not provided
         width = int(request.form.get("width", 1920))  # Default width
         height = int(request.form.get("height", 1080))  # Default height
@@ -54,33 +54,18 @@ def generate_image():
             # Download the image using requests
             response = requests.get(image_url)
             if response.status_code == 200:
-                # Open the image in memory
-                image_bytes = io.BytesIO(response.content)
-                image_bytes.seek(0)  # Reset stream pointer
+                # Save the image in the static folder
+                file_path = os.path.join(STATIC_IMAGE_FOLDER, f"generated_image_{width}x{height}.jpg")
+                with open(file_path, "wb") as f:
+                    f.write(response.content)
 
-                # Serve the image as a downloadable file
-                return send_file(
-                    image_bytes,
-                    mimetype='image/jpeg',
-                    as_attachment=True,
-                    download_name=f"generated_image_{width}x{height}.jpg"
-                )
+                # Provide the image download link
+                return render_template("index.html", image_path=f"generated_images/generated_image_{width}x{height}.jpg")
+
             else:
-                return render_template(
-                    "index.html",
-                    error="Failed to download the image.",
-                    prompt=prompt,
-                    width=width,
-                    height=height
-                )
+                return render_template("index.html", error="Failed to download the image.")
         except Exception as e:
-            return render_template(
-                "index.html",
-                error=f"Error generating image: {str(e)}",
-                prompt=prompt,
-                width=width,
-                height=height
-            )
+            return render_template("index.html", error=f"Error generating image: {str(e)}")
 
     return render_template('index.html')
 

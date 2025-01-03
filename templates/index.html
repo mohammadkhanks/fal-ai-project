@@ -10,25 +10,22 @@
     
     <form action="/generate-image" method="POST">
         <label for="prompt">Enter Prompt:</label><br>
-        <input type="text" id="prompt" name="prompt" value="A beautiful landscape"><br><br>
+        <input type="text" id="prompt" name="prompt" value="{{ request.form.get('prompt', 'A beautiful landscape') }}"><br><br>
         
         <label for="width">Width:</label><br>
-        <input type="number" id="width" name="width" value="1920"><br><br>
+        <input type="number" id="width" name="width" value="{{ request.form.get('width', '1920') }}"><br><br>
         
         <label for="height">Height:</label><br>
-        <input type="number" id="height" name="height" value="1080"><br><br>
+        <input type="number" id="height" name="height" value="{{ request.form.get('height', '1080') }}"><br><br>
 
-        <button type="submit">Generate Image</button>
+        <button type="submit">Generate and Download Image</button>
     </form>
 
-    {% if image_path %}
-        <h2>Generated Image:</h2>
-        <img src="{{ url_for('static', filename=image_path) }}" alt="Generated Image" style="max-width: 100%; max-height: 500px;">
-        
-        <br><br>
-        <a href="{{ url_for('static', filename=image_path) }}" download>
-            <button>Download Image</button>
-        </a>
+    {% if prompt and width and height %}
+        <h2>Image Generation Details:</h2>
+        <p><strong>Prompt:</strong> {{ prompt }}</p>
+        <p><strong>Width:</strong> {{ width }} px</p>
+        <p><strong>Height:</strong> {{ height }} px</p>
     {% endif %}
 
     {% if error %}

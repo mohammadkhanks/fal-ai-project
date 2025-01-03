@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Image</title>
+</head>
+<body>
+    <h1>Generate and Download Image</h1>
+    
+    <form action="/generate-image" method="POST">
+        <label for="prompt">Enter Prompt:</label><br>
+        <input type="text" id="prompt" name="prompt" value="A beautiful landscape"><br><br>
+        
+        <label for="width">Width:</label><br>
+        <input type="number" id="width" name="width" value="1920"><br><br>
+        
+        <label for="height">Height:</label><br>
+        <input type="number" id="height" name="height" value="1080"><br><br>
+
+        <button type="submit">Generate Image</button>
+    </form>
+
+    {% if image_path %}
+        <h2>Generated Image:</h2>
+        <img src="{{ url_for('static', filename=image_path) }}" alt="Generated Image" style="max-width: 100%; max-height: 500px;">
+        
+        <br><br>
+        <a href="{{ url_for('static', filename=image_path) }}" download>
+            <button>Download Image</button>
+        </a>
+    {% endif %}
+
+    {% if error %}
+        <p style="color:red;">Error: {{ error }}</p>
+    {% endif %}
+</body>
+</html>
