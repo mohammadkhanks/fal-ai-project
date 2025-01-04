@@ -53,15 +53,19 @@ def generate_image():
         seed = int(seed)  # Ensure seed is an integer
     
     try:
+        # Prepare arguments for the FAL API
+        arguments = {
+            "prompt": prompt,
+            "width": width,
+            "height": height,
+        }
+        if seed:  # Only include seed if it's provided
+            arguments["seed"] = int(seed)
+
         # Call the FAL AI API
         result = fal_client.subscribe(
             "fal-ai/flux-pro/v1.1",
-            arguments={
-                "prompt": prompt,
-                "width": width,
-                "height": height,
-                "seed": seed,
-            },
+            arguments=arguments,
         )
         image_url = result["images"][0]["url"]
         response = requests.get(image_url)
