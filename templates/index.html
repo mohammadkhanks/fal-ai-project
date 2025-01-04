@@ -38,15 +38,13 @@
     {% if image_url %}
         <h2>Generated Image:</h2>
         <img src="{{ image_url }}" alt="Generated Image" style="max-width: 100%; max-height: 500px;">
-        
-        <p><strong>Prompt:</strong> {{ prompt }}</p>
-        <p><strong>Image Size:</strong> {{ width }} x {{ height }}</p>
-        <p><strong>Seed:</strong> {{ seed }}</p>
-
-        <br><br>
         <a href="{{ image_url }}" download="generated_image_{{ width }}x{{ height }}_{{ seed }}.jpg">
             <button>Download Image</button>
         </a>
+        <br><br>
+        <p><strong>Prompt:</strong> {{ prompt }}</p>
+        <p><strong>Image Size:</strong> {{ width }} x {{ height }}</p>
+        <p><strong>Seed:</strong> {{ seed }}</p>
         
     {% endif %}
 
