@@ -53,34 +53,38 @@ def generate_image():
     if seed:
         seed = int(seed)  # Ensure seed is an integer
     
+    # Define model URLs
+    model_urls = {
+        "Random(No Persona)": None,  # Default model
+        "asko_kusko": "https://v3.fal.media/files/tiger/ihSURXVXpwnok8cpsy_Cn_pytorch_lora_weights.safetensors",
+        "mistik_biri": "https://v3.fal.media/files/panda/wqwyUtcau9Lvxdw6L72S6_pytorch_lora_weights.safetensors"
+    }
+
     try:
-        # Determine the model's URL based on user selection
-        model_urls = {
-            "Random(No Persona)": None,  # No specific model URL for the original model
-            "asko_kusko": "https://v3.fal.media/files/tiger/ihSURXVXpwnok8cpsy_Cn_pytorch_lora_weights.safetensors",
-            "mistik_biri": "https://v3.fal.media/files/panda/wqwyUtcau9Lvxdw6L72S6_pytorch_lora_weights.safetensors"
-        }
-
-        selected_model_url = model_urls.get(model)
-
         # Prepare arguments for the FAL API
         arguments = {
             "prompt": prompt,
             "width": width,
             "height": height,
+            "loras": []  # Default empty loras list
         }
         
         if seed:  # Only include seed if it's provided
             arguments["seed"] = int(seed)
         
-        if selected_model_url:
-            arguments["model"] = selected_model_url # Add model URL to the arguments if not random
+        if model != "Random(No Persona)":
+            arguments["loras"].append({
+                "path": model_urls[model],
+                "scale": 1  # Default scale for lora
+            })
 
         # Call the FAL AI API
         result = fal_client.subscribe(
             "fal-ai/flux-lora",
             arguments=arguments,
         )
+
+        # Get the generated image URL
         image_url = result["images"][0]["url"]
         response = requests.get(image_url)
         if response.status_code == 200:
