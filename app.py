@@ -41,49 +41,6 @@ def index():
     return render_template("index.html")
 
 @app.route("/generate-image", methods=["POST"])
-from flask import Flask, render_template, request, redirect, url_for, session, Response
-import os
-import fal_client
-import requests
-from io import BytesIO
-import time
-
-# Set the FAL_KEY environment variable (if not already set)
-os.environ["FAL_KEY"] = "your-api-key-here"
-
-# Fetch the API key from the environment
-FAL_KEY = os.getenv("FAL_KEY")
-if not FAL_KEY:
-    raise ValueError("FAL_KEY environment variable is not set.")
-
-# Authenticate with the FAL AI API key
-fal_client.api_key = FAL_KEY
-
-# Initialize Flask app
-app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY", "supersecretkey")  # Set a secure key for session management
-
-# Password for accessing the app
-APP_PASSWORD = "Postman"  # Replace with your desired password
-
-@app.route("/", methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        password = request.form.get("password")
-        if password == APP_PASSWORD:
-            session["logged_in"] = True
-            return redirect(url_for("index"))
-        else:
-            return render_template("login.html", error="Invalid password")
-    return render_template("login.html")
-
-@app.route("/index")
-def index():
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-    return render_template("index.html")
-
-@app.route("/generate-image", methods=["POST"])
 def generate_image():
     if not session.get("logged_in"):
         return redirect(url_for("login"))
