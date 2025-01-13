@@ -86,40 +86,20 @@ def generate_image():
                 arguments=arguments,
             )
             
-            yield "Image generation started...\n"
-            time.sleep(2)  # Simulate some processing time
-
             # Get the generated image URL
             image_url = result["images"][0]["url"]
-            yield f"Image URL: {image_url}\n"
             
-            # Fetch the image from the URL
-            response = requests.get(image_url)
-            if response.status_code == 200:
-                # Create an in-memory file for the image
-                img_data = BytesIO(response.content)
-                img_data.seek(0)
-
-                # Create a unique filename based on prompt, width, height, and seed
-                filename = f"generated_image_{width}x{height}_seed_{seed or 'random'}.jpg"
-
-                # Serve the image URL for UI display
-                image_data = {
-                    "image_url": image_url,  # URL to display the image
-                    "filename": filename,    # Filename for download
-                    "prompt": prompt,        # Show the prompt used
-                    "width": width,          # Show image width
-                    "height": height,        # Show image height
-                    "seed": seed or "random" # Show seed or "random"
-                }
-                yield f"Image generation complete! Filename: {filename}\n"
-                yield f"Prompt: {prompt}, Width: {width}, Height: {height}, Seed: {seed or 'random'}\n"
-            else:
-                yield "Failed to fetch the image.\n"
+            return render_template("index.html", 
+                                   image_url=image_url,
+                                   prompt=prompt, 
+                                   width=width, 
+                                   height=height, 
+                                   seed=seed, 
+                                   model=model)
         except Exception as e:
-            yield f"Error generating image: {str(e)}\n"
-
-    return Response(generate(), content_type="text/plain")
+            return render_template("index.html", error=f"Error generating image: {str(e)}")
+    
+    return generate() 
 
 @app.route("/logout", methods=['POST'])
 def logout():
