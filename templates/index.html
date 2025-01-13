@@ -29,6 +29,13 @@
         <label for="seed">Seed (Optional)<br>If you want to regenerate same photo in the future, use a number here. Use it to reproduce same photo. Else leave it empty for random:</label><br>
         <input type="number" id="seed" name="seed" placeholder="Enter seed value"><br><br>
 
+        <label for="model">Select Model:</label><br>
+        <select id="model" name="model">
+            <option value="Random(No Persona)">No Persona (Original Model)</option>
+            <option value="asko_kusko">Aşko Kuşko</option>
+            <option value="mistik_biri">Mistik Biri</option>
+        </select><br><br>
+
         <button type="submit">Generate Image</button>
     </form>
 
@@ -45,6 +52,7 @@
         <p><strong>Prompt:</strong> {{ prompt }}</p>
         <p><strong>Image Size:</strong> {{ width }} x {{ height }}</p>
         <p><strong>Seed:</strong> {{ seed }}</p>
+        <p><strong>Model:</strong> {{ model }}</p>
         
     {% endif %}
 
