@@ -89,7 +89,8 @@ def generate_image():
             )
             
             # Get the generated image URL
-            image_url = result["images"][0]["url"]
+            # image_url = result["images"][0]["url"]
+            image_url = [image["url"] for image in result["images"]]
             
             return render_template("index.html", 
                                    image_url=image_url,
