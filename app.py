@@ -90,16 +90,17 @@ def generate_image():
             
             # Get the generated image URL
             # image_url = result["images"][0]["url"]
-            image_url = [image["url"] for image in result["images"]]
-            
+            # Get the list of image URLs (up to the number of requested images)
+            image_urls = [image["url"] for image in result["images"]]
+
             return render_template("index.html", 
-                                   image_url=image_url,
-                                   prompt=prompt, 
-                                   width=width, 
-                                   height=height, 
-                                   num_images=num_images,
-                                   seed=seed, 
-                                   model=model)
+                                image_urls=image_urls,  # Pass list of image URLs
+                                prompt=prompt, 
+                                width=width, 
+                                height=height, 
+                                num_images=num_images,
+                                seed=seed, 
+                                model=model)
         except Exception as e:
             return render_template("index.html", error=f"Error generating image: {str(e)}")
     

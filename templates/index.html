@@ -45,7 +45,7 @@
     <!-- Add a gap here -->
     <br><br>
 
-    {% if image_url %}
+    <!-- {% if image_url %}
         <h2>Generated Image:</h2>
         <img src="{{ image_url }}" alt="Generated Image" style="max-width: 100%; max-height: 500px;">
         <a href="{{ image_url }}" download="generated_image_{{ width }}x{{ height }}_{{ seed }}.jpg">
@@ -62,6 +62,24 @@
 
     {% if error %}
         <p style="color:red;">Error: {{ error }}</p>
-    {% endif %}
+    {% endif %} -->
+    {% if image_urls %}
+    <h2>Generated Images:</h2>
+    {% for image_url in image_urls %}
+        <div>
+            <img src="{{ image_url }}" alt="Generated Image" style="max-width: 100%; max-height: 500px;">
+            <a href="{{ image_url }}" download="generated_image_{{ width }}x{{ height }}_{{ seed }}.jpg">
+                <button>Download Image</button>
+            </a>
+            <br><br>
+        </div>
+    {% endfor %}
+    <p><strong>Prompt:</strong> {{ prompt }}</p>
+    <p><strong>Image Size:</strong> {{ width }} x {{ height }}</p>
+    <p><strong>Number of Images:</strong> {{ num_images }}</p>
+    <p><strong>Seed:</strong> {{ seed }}</p>
+    <p><strong>Model:</strong> {{ model }}</p>
+{% endif %}
+
 </body>
 </html>
