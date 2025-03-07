@@ -26,6 +26,9 @@
         <label for="height">Height:</label><br>
         <input type="number" id="height" name="height" value="1080"><br><br>
 
+        <label for="num_images">Height:</label><br>
+        <input type="number" id="num_images" name="num_images" value="1"><br><br>
+
         <label for="seed">Seed (Optional)<br>If you want to regenerate same photo in the future, use a number here. Use it to reproduce same photo. Else leave it empty for random:</label><br>
         <input type="number" id="seed" name="seed" placeholder="Enter seed value"><br><br>
 
@@ -51,6 +54,7 @@
         <br><br>
         <p><strong>Prompt:</strong> {{ prompt }}</p>
         <p><strong>Image Size:</strong> {{ width }} x {{ height }}</p>
+        <p><strong>Number of Images:</strong> {{ num_images }}</p>
         <p><strong>Seed:</strong> {{ seed }}</p>
         <p><strong>Model:</strong> {{ model }}</p>
         

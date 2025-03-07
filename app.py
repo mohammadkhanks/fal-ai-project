@@ -49,6 +49,7 @@ def generate_image():
     prompt = request.form.get("prompt", "A beautiful landscape")
     width = int(request.form.get("width", 1920))
     height = int(request.form.get("height", 1080))
+    num_images = int(request.form.get("num_images", 1))
     seed = request.form.get("seed", None)
     model = request.form.get("model", "Random(No Persona)")
     if seed:
@@ -68,6 +69,7 @@ def generate_image():
                 "prompt": prompt,
                 "width": width,
                 "height": height,
+                "num_images": num_images,
                 "loras": []  # Default empty loras list
             }
             
@@ -94,6 +96,7 @@ def generate_image():
                                    prompt=prompt, 
                                    width=width, 
                                    height=height, 
+                                   num_images=num_images,
                                    seed=seed, 
                                    model=model)
         except Exception as e:
